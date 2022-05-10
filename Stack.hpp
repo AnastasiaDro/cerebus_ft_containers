@@ -6,16 +6,25 @@
 #define CEREBUS_FT_CONTAINERS_STACK_H
 
 namespace ft {
+    template<class T, class Cont >
     class Stack {
     private:
 
     public:
-        typedef Cont container_type
+        typedef Cont container_type;
+
         Stack();
-    //нужен ли здесь второй конструктор
-        explicit Stack(const container_type& cont)
+
+        //нужен ли здесь второй конструктор
+        explicit Stack(const container_type &cont);
+
+
+        //template functions
 
     };
+    template <class T, class Cont>
+        bool operator==(const Stack<T, Cont>& lhs, const Stack<T, Cont>&);
+  //  template
 }
 
 
