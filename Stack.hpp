@@ -9,7 +9,7 @@ namespace ft {
     template<class T, class Cont >
     class Stack {
     private:
-
+  //      _container
     public:
         typedef Cont container_type;
 
@@ -20,6 +20,12 @@ namespace ft {
 
 
         //template functions
+        bool empty();
+        int size();
+        //top
+        //push();
+        //pop();
+
 
     };
     template <class T, class Cont>
