@@ -47,9 +47,15 @@ namespace ft {
     };
 
     template <class T, class Container>
-        bool operator==(const stack<T, Container>& lhs, const stack<T, Container>&);
+        bool operator==(const stack<T, Container>& lhs, const stack<T, Container>&rhs) {
+            return (lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin()));
+        }
+
     template <class T, class Container>
-        bool operator!=(const stack<T, Container>& lhs, const stack<T, Container>&);
+        bool operator!=(const stack<T, Container>& lhs, const stack<T, Container>&rhs) {
+            return !(lhs == rhs);
+        }
+
     template <class T, class Container>
         bool operator<(const stack<T, Container>& lhs, const stack <T, Container>&);
     template <class T, class Container>
