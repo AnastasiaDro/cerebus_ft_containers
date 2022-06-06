@@ -8,6 +8,8 @@
 namespace ft {
 
     template<class T, class A> class vector {
+
+
     public:
         typedef A allocator_type;
         typedef typename A::pointer pointer;
@@ -21,12 +23,26 @@ namespace ft {
         typedef T3 difference_type;
         typedef reverse_iterator<const_iterator> const_reverse_iterator;
         typedef reverse_iterator<iterator> reverse_iterator;
-        vector();
+
+    private:
+        pointer container;
+        size_type capacity;
+        size_type size;
+
+    public:
+        vector(): pointer(nullptr), capacity(0), size(0) {}
+
         explicit vector(const A& a1);
         explicit vector(size_type n);
         vector(size_type n, const T& x);
         vector(size_type n, const T& x, const A& a1);
         vector(const vectors x);
+
+        template<class InIt>
+            vector(InIt first, InIt last);
+        template<class InIt>
+                vector(InIt first, InIt last, const A& al);
+
         ~vector();
 
         template<class <class InIt>
@@ -54,6 +70,7 @@ namespace ft {
         bool empty() const;
 
         A get_allocator() const;
+
         reference at(size_type pos);
         const_reference at(size_type pos) const;
         reference operator[](size_type pos);
@@ -68,13 +85,17 @@ namespace ft {
 
         template<class InIt>
                 void assign(InIt first, InIt last);
+        void assign(size_type n, const T& x);
         iterator insert(iterator it, const T& x);
         void insert(iterator it, size_type n, const T& x);
         template<class InIt>
                 void insert(iterator it, InIt first, InIt last);
         iterator erase(iterator it);
         iterator erase(iterator first, iterator last);
-        void clear();
+
+        void clear() {
+            erase(begin(), end());
+        }
         void swap(vectors x);
 
 
