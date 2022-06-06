@@ -12,11 +12,11 @@ namespace ft {
 
     public:
         typedef A allocator_type;
-        typedef typename A::pointer pointer;
-        typedef typename A::const_pointer const_pointer;
-        typedef typename A::reference reference;
-        typedef typename A::const_reference const_reference;
-        typedef typename A::value_type value_type;
+        typedef typename allocator_type::pointer pointer;
+        typedef typename allocator_type::const_pointer const_pointer;
+        typedef typename allocator_type::reference reference;
+        typedef typename allocator_type::const_reference const_reference;
+        typedef typename allocator_type::value_type value_type;
         typedef T0 iterator;
         typedef T1 const_iterator;
         typedef T2 size_type;
@@ -25,14 +25,17 @@ namespace ft {
         typedef reverse_iterator<iterator> reverse_iterator;
 
     private:
-        pointer container;
+        pointer container; //указатель на память
         size_type capacity;
         size_type size;
 
     public:
-        vector(): pointer(nullptr), capacity(0), size(0) {}
+        vector(): container(nullptr), capacity(0), size(0) {}
 
-        explicit vector(const A& a1);
+        //explicit vector(const A& a1);
+        explicit vector(const allocator_type& a1) {
+
+        }
         explicit vector(size_type n);
         vector(size_type n, const T& x);
         vector(size_type n, const T& x, const A& a1);
