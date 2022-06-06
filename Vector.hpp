@@ -22,13 +22,21 @@ namespace ft {
             return ! (lhs == rhs);
         }
     template<class T , class A>
-        bool operator<(const vector<T, А>& lhs , const vector<T, А>& rhs ) ;
+        bool operator<(const vector<T, А>& lhs , const vector<T, А>& rhs ) {
+            return(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()))
+        }
     template<class T , class A>
-        bool operator>(const vector<T, А>& lhs , const vector<T, А>& rhs ) ;
+        bool operator>(const vector<T, А>& lhs , const vector<T, А>& rhs ) {
+            return(rhs < lhs);
+        }
     template<class T , class A>
-        bool operator<=(const vector<T, А>& lhs , const vector<T, А>& rhs ) ;
+        bool operator<=(const vector<T, А>& lhs , const vector<T, А>& rhs ) {
+            return !(rhs < lhs);
+        }
     template<class T , class A>
-        bool operator>=(const vector<T, А>& lhs , const vector<T, А>& rhs ) ;
+        bool operator>=(const vector<T, А>& lhs , const vector<T, А>& rhs ) {
+            return !(lhs < rhs);
+        }
 
 }
 
