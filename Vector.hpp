@@ -27,6 +27,7 @@ namespace ft {
         vector(size_type n, const T& x);
         vector(size_type n, const T& x, const A& a1);
         vector(const vectors x);
+        ~vector();
 
         template<class <class InIt>
                 vector(InIt first, InIt last);
@@ -37,8 +38,44 @@ namespace ft {
         size_type capacity() const;
 
         //дальше страница 357
+        //iterators
+        iterator begin();
+        const_iterator begin() const;
+        iterator end();
+        const_iterator end() const;
+        reverse_iterator rend();
+        const_reverse_iterator rend() const;
 
+        //capacity
+        void resize(size_type n);
+        void resize(size_type n, T x);
+        size_type size() const;
+        size_type max_size() const;
+        bool empty() const;
 
+        A get_allocator() const;
+        reference at(size_type pos);
+        const_reference at(size_type pos) const;
+        reference operator[](size_type pos);
+        const_reference operator[](size_type pos);
+        reference front();
+        const_reference front() const;
+        reference back();
+        const_reference back() const;
+
+        void push_back(const T& x);
+        void pop_back();
+
+        template<class InIt>
+                void assign(InIt first, InIt last);
+        iterator insert(iterator it, const T& x);
+        void insert(iterator it, size_type n, const T& x);
+        template<class InIt>
+                void insert(iterator it, InIt first, InIt last);
+        iterator erase(iterator it);
+        iterator erase(iterator first, iterator last);
+        void clear();
+        void swap(vectors x);
 
 
     };
