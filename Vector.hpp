@@ -11,12 +11,12 @@ namespace ft {
 
 
     public:
-        typedef A allocator_type;
-        typedef typename allocator_type::pointer pointer;
-        typedef typename allocator_type::const_pointer const_pointer;
-        typedef typename allocator_type::reference reference;
-        typedef typename allocator_type::const_reference const_reference;
-        typedef typename allocator_type::value_type value_type;
+        typedef A allocator;
+        typedef typename allocator::pointer pointer;
+        typedef typename allocator::const_pointer const_pointer;
+        typedef typename allocator::reference reference;
+        typedef typename allocator::const_reference const_reference;
+        typedef typename allocator::value_type value_type;
         typedef T0 iterator;
         typedef T1 const_iterator;
         typedef T2 size_type;
@@ -25,7 +25,7 @@ namespace ft {
         typedef reverse_iterator<iterator> reverse_iterator;
 
     private:
-        pointer container; //указатель на память
+        pointer array; //указатель на память
         size_type capacity;
         size_type size;
 
@@ -33,10 +33,12 @@ namespace ft {
         vector(): container(nullptr), capacity(0), size(0) {}
 
         //explicit vector(const A& a1);
-        explicit vector(const allocator_type& a1) {
+        explicit vector(const allocator& a1 = allocator_type) :  {
 
         }
-        explicit vector(size_type n);
+        explicit vector(size_type n) {
+			allocator.alocate(n)
+		}
         vector(size_type n, const T& x);
         vector(size_type n, const T& x, const A& a1);
         vector(const vectors x);
@@ -46,15 +48,21 @@ namespace ft {
         template<class InIt>
                 vector(InIt first, InIt last, const A& al);
 
-        ~vector();
+        ~vector() {
+			clear();
+			if (capacity != 0)
+				allocator.deallocate(array, capacity);
+		}
 
         template<class <class InIt>
                 vector(InIt first, InIt last);
 
         template<class <class InIt>
                 vector(InIt first, InIt last, const A& a1);
-        vois reserve(size_type n);
-        size_type capacity() const;
+        void reserve(size_type n);
+        size_type capacity() const {
+			return capacity;
+		}
 
         //дальше страница 357
         //iterators
@@ -68,11 +76,20 @@ namespace ft {
         //capacity
         void resize(size_type n);
         void resize(size_type n, T x);
-        size_type size() const;
-        size_type max_size() const;
-        bool empty() const;
+        size_type size() const {
+			return size;
+		}
+        size_type max_size() const {
+			return allocator.max_size();
+		}
 
-        A get_allocator() const;
+        bool empty() const {
+			return (size == 0);
+		}
+
+        A get_allocator() const {
+			return allocator_type;
+		}
 
         reference at(size_type pos);
         const_reference at(size_type pos) const;
