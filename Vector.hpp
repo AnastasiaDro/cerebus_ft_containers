@@ -35,13 +35,13 @@ namespace ft {
     public:
         vector(): array(NULL), arrCapacity(0), arrSize(0) {}
 
-        explicit vector(const allocator_type& a1)  : array(NULL), arrSize(0), arrCapacity(0), allocator_type(a1) {}
+        explicit vector(const allocator_type& a1 = allocator_type())  : array(NULL), arrSize(0), arrCapacity(0), allocator_type(a1) {}
 
-        explicit vector(size_type n) : arrCapacity(n), arrSize(n), array(NULL) {
+        explicit vector(size_type n) : arrCapacity((int)(n * 1.5)), arrSize(n), array(NULL) {
 			array = allocator.allocate(n);
 		}
 
-        explicit vector(size_type n, const T& x = T()): arrSize(n), arrCapacity(n) {
+        explicit vector(size_type n, const T& x = T()): arrSize(n), arrCapacity((int)(n * 1.5)) {
 			allocator = allocator_type();
 			array = allocator.allocate(arrCapacity);
 			for (int i = 0; i < n; ++i) {
