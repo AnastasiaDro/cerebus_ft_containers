@@ -38,7 +38,7 @@ namespace ft {
         explicit vector(const allocator_type& a1 = allocator_type())  : array(NULL), arrSize(0), arrCapacity(0), allocator_type(a1) {}
 
         explicit vector(size_type n) : arrCapacity((int)(n * 1.5)), arrSize(n), array(NULL) {
-			array = allocator.allocate(n);
+			array = allocator.allocate(arrCapacity);
 		}
 
         explicit vector(size_type n, const T& x = T()): arrSize(n), arrCapacity((int)(n * 1.5)) {
@@ -61,7 +61,12 @@ namespace ft {
 		}
 
         template<class InIt>
-            vector(InIt first, InIt last);
+            vector(InIt first, InIt last, const allocator_type& alloc = allocator_type(),
+				   typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : array(NULL), arrSize(0), arrCapacity(0), allocator_type(alloc)
+		{
+			allocator = alloc;
+			insert(begin(), first, last);
+		}
         template<class InIt>
                 vector(InIt first, InIt last, const A& al);
 
