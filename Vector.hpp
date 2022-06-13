@@ -6,11 +6,12 @@
 #define CEREBUS_FT_CONTAINERS_VECTOR_H
 
 #include <cstddef>
+#include <memory>
 
 namespace ft {
 
-    template<class T, class A> class vector {
-
+    template < class T, class A = std::allocator<T> >
+    class vector {
 
     public:
         typedef A allocator_type;
@@ -19,14 +20,14 @@ namespace ft {
         typedef typename allocator_type::reference reference;
         typedef typename allocator_type::const_reference const_reference;
         typedef typename allocator_type::value_type value_type;
-        typedef T0 iterator;
-        typedef T1 const_iterator;
-        typedef T2 size_type;
-        typedef T3 difference_type;
-        typedef reverse_iterator<const_iterator> const_reverse_iterator;
-        typedef reverse_iterator<iterator> reverse_iterator;
+		typedef ft::vector_iterator<false, value_type>		iterator;
+		typedef ft::vector_iterator<true, value_type>		const_iterator;
+		typedef ft::reverse_iterator<iterator>				reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+		typedef ptrdiff_t									difference_type;
+		typedef size_t										size_type;
 
-    private:
+	private:
         pointer array; //указатель на память
         size_type arrCapacity;
         size_type arrSize;
@@ -85,12 +86,29 @@ namespace ft {
 
         //дальше страница 357
         //iterators
-        iterator begin();
-        const_iterator begin() const;
-        iterator end();
-        const_iterator end() const;
-        reverse_iterator rend();
-        const_reverse_iterator rend() const;
+        iterator begin() {
+			return iterator(array);
+		}
+        const_iterator begin() const {
+			return const_iterator (array);
+		}
+        iterator end() {
+			return iterator(array + arrSize);
+		}
+        const_iterator end() const {
+			return const_iterator(array + arrSize);
+		}
+		const_reverse_iterator rbegin() const {
+			return (const_reverse_iterator(end()));
+		}
+
+		reverse_iterator rend() {
+			return (reverse_iterator(begin()));
+		}
+
+		const_reverse_iterator rend() const {
+			return (const_reverse_iterator(begin()));
+		}
 
         //capacity
         void resize(size_type n);
@@ -100,7 +118,7 @@ namespace ft {
 		}
 
 		size_type capacity() const {
-			return capacity;
+			return arrCapacity;
 		}
 
         size_type max_size() const {
