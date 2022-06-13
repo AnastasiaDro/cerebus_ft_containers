@@ -33,7 +33,7 @@ namespace ft {
 		allocator_type allocator;
 
     public:
-        vector(): array(nullptr), arrCapacity(0), arrSize(0) {}
+        vector(): array(NULL), arrCapacity(0), arrSize(0) {}
 
         explicit vector(const allocator_type& a1)  : array(NULL), arrSize(0), arrCapacity(0), allocator_type(a1) {}
 
@@ -41,8 +41,21 @@ namespace ft {
 			array = allocator.allocate(n);
 		}
 
-        vector(size_type n, const T& x);
-        vector(size_type n, const T& x, const A& a1);
+        explicit vector(size_type n, const T& x = T()): arrSize(n), arrCapacity(n) {
+			allocator = allocator_type();
+			array = allocator.allocate(arrCapacity);
+			for (int i = 0; i < n; ++i) {
+				allocator.construct(&array[i], x);
+			}
+		}
+
+        explicit vector(size_type n, const T& x = T(), const A& a1 = allocator_type()) : arrSize(n), arrCapacity(n), allocator(a1) {
+			array = allocator.allocate(n);
+			for (int i = 0; i < n; ++i) {
+				allocator.construct(&array[i], x);
+			}
+		}
+
         vector(const vector& x) : array(NULL), arrSize(0), arrCapacity(0), allocator_type(x.allocator_type) {
 			insert(begin(), x.begin(), x.end());
 		}
