@@ -383,8 +383,6 @@ namespace ft {
             arr_capacity = tmp_capacity;
             allocator = tmp_allocator;
         }
-
-
     };
 
     template<class T, class A>
