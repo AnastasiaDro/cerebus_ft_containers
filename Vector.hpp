@@ -37,11 +37,10 @@ namespace ft {
 		allocator_type allocator;
 
     public:
-
         template <class InputIterator>
-        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : array(NULL), arr_size(0), arr_capacity(0), allocator(alloc){
-            allocator = alloc;
+        vector (InputIterator first, InputIterator last, const allocator_type& a = allocator_type(),
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : array(NULL), arr_size(0), arr_capacity(0), allocator(a){
+            allocator = a;
             insert(begin(), first, last);
         }
 
@@ -72,15 +71,6 @@ namespace ft {
 			insert(begin(), x.begin(), x.end());
 		}
 
-        template<class InIt>
-            vector(InIt first, InIt last, const allocator_type& alloc = allocator_type(),
-				   typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : array(NULL), arr_size(0), arr_capacity(0), allocator_type(alloc)
-		{
-			allocator = alloc;
-			insert(begin(), first, last);
-		}
-        template<class InIt>
-                vector(InIt first, InIt last, const A& al);
 
         ~vector() {
 			clear();
@@ -88,11 +78,7 @@ namespace ft {
 				allocator.deallocate(array, arr_capacity);
 		}
 
-        template<class <class InIt>
-                vector(InIt first, InIt last);
 
-        template<class <class InIt>
-                vector(InIt first, InIt last, const A& a1);
         void reserve (size_type n)
         {
             if (n > arr_capacity)
@@ -397,7 +383,7 @@ namespace ft {
 
     template<class T, class A>
     bool operator<(const vector<T, A> &lhs, const vector<T, A> &rhs) {
-        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()))
+        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
 
     template<class T, class A>
