@@ -388,33 +388,34 @@ namespace ft {
     };
 
     template<class T, class A>
-        bool operator==(const vector<T, А>& lhs , const vector<T, А>& rhs ){
-            return (lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin()));
-        }
+    bool operator==(const vector<T, A> &lhs, const vector<T, A> &rhs) {
+        return (lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin()));
+    }
 
-    template<class T , class A>
-        bool operator!=(const vector<T, А>& lhs , const vector<T, А>& rhs ) {
-            return !(lhs == rhs);
-        }
-    template <class T, class A>
-        bool operator<(const vector<T, А>& lhs , const vector<T, А>& rhs ) {
-            return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()))
-        }
+    template<class T, class A>
+    bool operator!=(const vector<T, A> &lhs, const vector<T, A> &rhs) {
+        return !(lhs == rhs);
+    }
 
-    template<class T , class A>
-        bool operator>(const vector<T, А>& lhs , const vector<T, А>& rhs ) {
-            return(rhs < lhs);
-        }
+    template<class T, class A>
+    bool operator<(const vector<T, A> &lhs, const vector<T, A> &rhs) {
+        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()))
+    }
 
-    template<class T , class A>
-        bool operator<=(const vector<T, А>& lhs , const vector<T, А>& rhs ) {
-            return !(rhs < lhs);
-        }
+    template<class T, class A>
+    bool operator>(const vector<T, A> &lhs, const vector<T, A> &rhs) {
+        return (rhs < lhs);
+    }
 
-    template<class T , class A>
-        bool operator>=(const vector<T, А>& lhs , const vector<T, А>& rhs ) {
-            return !(lhs < rhs);
-        }
+    template<class T, class A>
+    bool operator<=(const vector<T, A> &lhs, const vector<T, A> &rhs) {
+        return !(rhs < lhs);
+    }
+
+    template<class T, class A>
+    bool operator>=(const vector<T, A> &lhs, const vector<T, A> &rhs) {
+        return !(lhs < rhs);
+    }
 
     template <class T, class A>
     void swap (vector<T, A>& x, vector<T, A>& y) {
