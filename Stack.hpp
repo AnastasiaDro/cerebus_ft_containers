@@ -2,71 +2,98 @@
 // Created by Cesar Erebus on 5/10/22.
 //
 
-#ifndef CEREBUS_FT_CONTAINERS_STACK_H
-#define CEREBUS_FT_CONTAINERS_STACK_H
-#include <vector>
+#ifndef FT_CONTAINERS_STACK_H
+#define FT_CONTAINERS_STACK_H
+#include "Vector.hpp"
 
 
 namespace ft {
-    template<class T, class Container = std::vector<T> >
+    template<class T, class Container = ft::vector<T> >
             class stack {
     protected:
-        Container _container;
+        Container container;
     public:
         typedef Container container_type;
         typedef typename Container::value_type value_type;
         typedef typename Container::size_type size_type;
 
         //нужен ли здесь второй конструктор
-        explicit stack(const container_type &cont = container_type()) : _container(cont) {}
+        explicit stack(const container_type &cont = container_type()) : container(cont) {}
 
         //template functions
         bool empty() const {
-            return _container.empty();
+            return container.empty();
         }
         size_type size() const {
-            return _container.size();
+            return container.size();
         }
 
         const value_type& top ( ) const {
-            return _container.back();
+            return container.back();
         }
 
         value_type &top() {
-           return _container.back();
+           return container.back();
         }
+
         void push(const value_type& x) {
-            _container.push_back(x);
+            container.push_back(x);
         }
 
         void pop() {
-            _container.pop_back();
+            container.pop_back();
         }
+
+        template<class T1, class T2>
+        friend bool operator==(const stack<T1, T2> &lhs, const stack<T1, T2> &rhs);
+
+        template<class T1, class T2>
+        friend bool operator!=(const stack<T1, T2> &lhs, const stack<T1, T2> &rhs);
+
+        template<class T1, class T2>
+        friend bool operator<(const stack<T1, T2> &lhs, const stack<T1, T2> &rhs);
+
+        template<class T1, class T2>
+        friend bool operator<=(const stack<T1, T2> &lhs, const stack<T1, T2> &rhs);
+
+        template<class T1, class T2>
+        friend bool operator>(const stack<T1, T2> &lhs, const stack<T1, T2> &rhs);
+
+        template<class T1, class T2>
+        friend bool operator>=(const stack<T1, T2> &lhs, const stack<T1, T2> &rhs);
 
         virtual ~stack() {}
     };
 
     template <class T, class Container>
         bool operator==(const stack<T, Container>& lhs, const stack<T, Container>&rhs) {
-            return (lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin()));
+            return (lhs == rhs);
         }
 
     template <class T, class Container>
         bool operator!=(const stack<T, Container>& lhs, const stack<T, Container>&rhs) {
-            return !(lhs == rhs);
+            return (lhs != rhs);
         }
 
+    template<class T, class Container>
+    bool operator<(const stack<T, Container> &lhs, const stack<T, Container> &rhs) {
+        return (lhs.container < rhs.container);
+    }
+
+    template<class T, class Container>
+    bool operator>(const stack<T, Container> &lhs, const stack<T, Container> &rhs) {
+        return (lhs.container > rhs.container);
+    }
+
+    template<class T, class Container>
+    bool operator<=(const stack<T, Container> &lhs, const stack<T, Container> &rhs) {
+        return (lhs.container <= rhs.container);
+    }
+
     template <class T, class Container>
-        bool operator<(const stack<T, Container>& lhs, const stack <T, Container>&);
-    template <class T, class Container>
-        bool operator>(const stack<T, Container>& lhs, const stack <T, Container>&);
-    template <class T, class Container>
-        bool operator<=(const stack<T, Container>& lhs, const stack <T, Container>&);
-    template <class T, class Container>
-        bool operator>=(const stack<T, Container>& lhs, const stack <T, Container>&);
-  //  template
+    bool operator>=(const stack<T, Container>& lhs, const stack <T, Container>&rhs) {
+        return (lhs.container >= rhs.container);
+    }
 }
 
-
-
-#endif //CEREBUS_FT_CONTAINERS_STACK_H
+#endif
