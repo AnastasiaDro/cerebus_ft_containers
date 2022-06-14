@@ -82,7 +82,35 @@ namespace ft {
 
         template<class <class InIt>
                 vector(InIt first, InIt last, const A& a1);
-        void reserve(size_type n);
+        void reserve (size_type n)
+        {
+            if (n > arrCapacity)
+            {
+                size_type i = 0;
+                pointer new_array = allocator.allocate(n);
+                try
+                {
+                    for (i = 0; i < arrSize; ++i)
+                    {
+                        allocator.construct(&new_array[i], array[i]);
+                    }
+                }
+                catch(const std::exception& e)
+                {
+                    for (size_type j = 0; j < i; ++j)
+                        allocator.destroy(&new_array[i]);
+                    allocator.deallocate(new_array, n);
+                    throw;
+                }
+                for (size_type j = 0; j < arrSize; ++j)
+                {
+                    allocator.destroy(&array[j]);
+                }
+                allocator.deallocate(array, arrCapacity);
+                array = new_array;
+                arrCapacity = n;
+            }
+        }
 
         //дальше страница 357
         //iterators
@@ -111,8 +139,20 @@ namespace ft {
 		}
 
         //capacity
-        void resize(size_type n);
-        void resize(size_type n, T x);
+
+        void resize (size_type n, value_type val = value_type())
+        {
+            if (n > arrSize)
+            {
+                if (n > arrCapacity)
+                    reserve(n);
+            }
+            for (; arrSize < arrCapacity; arrSize++)
+                allocator.construct(&array[arrSize], val);
+            for (size_type i = n; i < arrCapacity; ++i)
+                allocator.destroy(&array[i]);
+            this->_size = n;
+        }
         size_type size() const {
 			return arrSize;
 		}
@@ -133,12 +173,30 @@ namespace ft {
 			return allocator;
 		}
 
-        reference at(size_type pos);
-        const_reference at(size_type pos) const;
-        reference operator[](size_type pos);
-        const_reference operator[](size_type pos);
-        reference front();
-        const_reference front() const;
+        reference at(size_type pos) {
+            if (pos > arrSize)
+                throw std::out_of_range("vector::at()");
+            return (reference(array[pos]));
+        }
+        const_reference at(size_type pos) const {
+            if (pos > arrSize)
+                throw std::out_of_range("vector::at()");
+            return (reference(array[pos]));
+        }
+
+        reference operator[](size_type pos) {
+            return array[pos];
+        }
+        const_reference operator[](size_type pos) const {
+            return array[pos];
+        }
+
+        reference front() {
+            return *array;
+        }
+        const_reference front() const {
+            return *array;
+        }
         reference back();
         const_reference back() const;
 
