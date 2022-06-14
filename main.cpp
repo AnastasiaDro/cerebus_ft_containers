@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "Stack.hpp"
+#include "stack.hpp"
 
 int main() {
     std::cout << "Hello, World!" << std::endl;

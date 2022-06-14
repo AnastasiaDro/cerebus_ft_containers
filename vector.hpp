@@ -2,8 +2,8 @@
 // Created by Дрогунова Анастасия Викторовна on 05.06.2022.
 //
 
-#ifndef CEREBUS_FT_CONTAINERS_VECTOR_H
-#define CEREBUS_FT_CONTAINERS_VECTOR_H
+#ifndef VECTOR_H
+#define VECTOR_H
 
 #include <iostream>
 #include <memory>

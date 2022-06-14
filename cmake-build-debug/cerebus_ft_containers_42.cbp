@@ -80,13 +80,34 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/Stack.hpp">
+		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/RedBlackTree.hpp">
 			<Option target="containers_42"/>
 		</Unit>
-		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/Vector.hpp">
+		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/ft_is_integral.hpp">
 			<Option target="containers_42"/>
 		</Unit>
 		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/main.cpp">
+			<Option target="containers_42"/>
+		</Unit>
+		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/map.hpp">
+			<Option target="containers_42"/>
+		</Unit>
+		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/node_tree.hpp">
+			<Option target="containers_42"/>
+		</Unit>
+		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/reverse_iterator.hpp">
+			<Option target="containers_42"/>
+		</Unit>
+		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/stack.hpp">
+			<Option target="containers_42"/>
+		</Unit>
+		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/utils.hpp">
+			<Option target="containers_42"/>
+		</Unit>
+		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/vector.hpp">
+			<Option target="containers_42"/>
+		</Unit>
+		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/vector_iterator.hpp">
 			<Option target="containers_42"/>
 		</Unit>
 		<Unit filename="/Users/cerebus/CLionProjects/cerebus_ft_containers/CMakeLists.txt">
