@@ -8,7 +8,7 @@ namespace ft {
     typedef enum {
         RED,
         BLACK
-    } color;
+    } Color;
 
     template<typename T, class Compare, class Alloc>
     class RedBlackTree {
