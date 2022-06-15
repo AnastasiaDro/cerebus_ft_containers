@@ -147,6 +147,10 @@ namespace ft {
 			}
 
 
+            allocator_type get_allocator() const {
+                return (allocator);
+            }
+
 			template <class InIt>
 			void insert(InIt f, InIt l) {
 				while (f != l) {
@@ -191,113 +195,92 @@ namespace ft {
 				return (value_compare(key_compare()));
 			}
 
-			iterator find (const key_type& key) {
+            const_it find(const key_type& k) const
+            {
+                ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
+                return (const_it(container.search_node(value), container.get_root()));
+            }
+
+			iterator find(const key_type& key) {
 				ft::pair<const key_type, val_type> pair = ft::make_pair<const key_type, val_type>(key, val_type());
 				return (iterator(container.search_node(pair), container.get_root()));
 			}
 
-			const_it find (const key_type& k) const
-			{
-				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
-				return (const_it(container.search_node(value), container.get_root()));
+
+			size_type count(const key_type& key) const {
+				ft::pair<const key_type, val_type> pair = ft::make_pair<const key_type, val_type>(key, val_type());
+                return (container.search_node(pair)) ? 1 : 0;
 			}
 
-			size_type count (const key_type& k) const
-			{
-				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
-				if (container.search_node(value))
-					return (1);
-				else
-					return (0);
-			}
+            const_it lower_bound(const key_type& key) const {
+                ft::pair<const key_type, val_type> pair = ft::make_pair<const key_type, val_type>(key, val_type());
+                node_ptr other = NULL;
+                container.lower(pair, container.get_root(), &other);
+                return (const_it(other, container.get_root()));
+            }
 
-			iterator lower_bound (const key_type& k)
-			{
-				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
+			iterator lower_bound(const key_type& key) {
+				ft::pair<const key_type, val_type> pair = ft::make_pair<const key_type, val_type>(key, val_type());
 				node_ptr other = NULL;
-				container.lower(value, container.get_root(), &other);
+				container.lower(pair, container.get_root(), &other);
 				return (iterator(other, container.get_root()));
 			}
 
-			const_it lower_bound(const key_type& k) const
-			{
-				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
-				node_ptr other = NULL;
-				container.lower(value, container.get_root(), &other);
-				return (const_it(other, container.get_root()));
-			}
+            const_it upper_bound(const key_type& key) const {
+                ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(key, val_type());
+                node_ptr other = NULL;
+                container.upper(value, container.get_root(), &other);
+                return (const_it(other, container.get_root()));
+            }
 
-			iterator upper_bound(const key_type& k)
-			{
-				node_ptr sougth = NULL;
-				ft::pair<const key_type, val_type> p = ft::make_pair<const key_type, val_type>(k, val_type());
-				container.upper(p, container.get_root(), &sougth);
-				return iterator(sougth, container.get_root());
-			}
+            iterator upper_bound(const key_type &key) {
+                node_ptr ptr = NULL;
+                ft::pair<const key_type, val_type> pair = ft::make_pair<const key_type, val_type>(key, val_type());
+                container.upper(pair, container.get_root(), &ptr);
+                return iterator(ptr, container.get_root());
+            }
 
-			const_it upper_bound(const key_type& k) const
-			{
-				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
-				node_ptr other = NULL;
-				container.upper(value, container.get_root(), &other);
-				return (const_it(other, container.get_root()));
-			}
+            pair<iterator, iterator> equal_range(const key_type& key) {
+                return ft::make_pair(lower_bound(key), upper_bound(key));
+            }
 
-			pair<const_it,const_it> equal_range(const key_type& k) const
-			{
-				return ft::make_pair(lower_bound(k), upper_bound(k));
-			}
-
-			pair<iterator,iterator> equal_range(const key_type& k)
-			{
-				return ft::make_pair(lower_bound(k), upper_bound(k));
-			}
-
-			allocator_type get_allocator() const
-			{
-				return (this->allocator);
+			pair<const_it, const_it> equal_range(const key_type& key) const {
+				return ft::make_pair(lower_bound(key), upper_bound(key));
 			}
 	};
 
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator==(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
-	{
+	template <class Key, class T, class Compare, class Allocator>
+	bool operator==(const map<Key, T, Compare, Allocator> &lhs, const map<Key, T, Compare, Allocator> &rhs) {
 		return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
 
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator!=(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
-	{
+	template <class Key, class T, class Compare, class Allocator>
+	bool operator!=(const map<Key, T, Compare, Allocator> &lhs, const map<Key, T, Compare, Allocator> &rhs) {
 		return (!(lhs == rhs));
 	}
 
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator<(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
-	{
+	template <class Key, class T, class Compare, class Allocator>
+	bool operator<(const map<Key, T, Compare, Allocator> &lhs, const map<Key, T, Compare, Allocator> &rhs) {
 		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 	}
 
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator<=(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
-	{
+	template <class Key, class T, class Compare, class Allocator>
+	bool operator<=(const map<Key, T, Compare, Allocator> &lhs, const map<Key, T, Compare, Allocator> &rhs) {
 		return (!(rhs < lhs));
 	}
 
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator>(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
-	{
+	template <class Key, class T, class Compare, class Allocator>
+	bool operator>(const map<Key, T, Compare, Allocator> &lhs, const map<Key, T, Compare, Allocator> &rhs) {
 		return (rhs < lhs);
 	}
 
-	template <class Key, class T, class Compare, class Alloc>
-	bool operator>=(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
-	{
+	template <class Key, class T, class Compare, class Allocator>
+	bool operator>=(const map<Key, T, Compare, Allocator> &lhs, const map<Key, T, Compare, Allocator> &rhs) {
 		return (!(lhs < rhs));
 	}
 
-	template<class Key, class T, class Compare, class Alloc>
-	void swap(map<Key,T,Compare,Alloc>& lhs, map<Key,T,Compare,Alloc>& rhs)
-	{
+	template<class Key, class T, class Compare, class Allocator>
+	void swap(map<Key, T, Compare, Allocator>& lhs, map<Key, T, Compare, Allocator>& rhs) {
 		lhs.swap(rhs);
 	}
 }
