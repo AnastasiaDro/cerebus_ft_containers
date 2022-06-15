@@ -8,243 +8,204 @@
 #include "node_tree.hpp"
 #include "reverse_iterator.hpp"
 
-namespace ft
-{
+namespace ft {
 	template <class Key, class T,
-	class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > >
-	class map
-	{
-		public:
-			typedef Key															key_type;
-			typedef T															mapped_type;
-			typedef pair<const key_type, mapped_type>							value_type;
-			typedef Compare														key_compare;
-			typedef Alloc														allocator_type;
-			typedef typename allocator_type::reference							reference;
-			typedef typename allocator_type::const_reference					const_reference;
-			typedef typename allocator_type::pointer							pointer;
-			typedef typename allocator_type::const_pointer						const_pointer;
-			typedef bidirectional_iterator<true, value_type>					const_iterator;
-			typedef bidirectional_iterator<false, value_type>					iterator;
-			typedef ft::reverse_iterator<iterator>								reverse_iterator;
-			typedef ft::reverse_iterator<const_iterator>						const_reverse_iterator;
-			typedef typename ft::iterator_traits<iterator>::diff_type		    difference_type;
-			typedef size_t														size_type;
+	class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key,T> > >
+    class map {
+    public:
+        typedef Key key_type;
+        typedef T val_type;
+        typedef Allocator allocator_type;
+        typedef pair<const key_type, val_type> pair_type;
+        typedef Compare key_compare;
 
-			class value_compare : std::binary_function<value_type, value_type, bool>
-			{
-				friend class map<key_type, mapped_type, key_compare, Alloc>;
+        typedef typename allocator_type::pointer ptr;
+        typedef typename allocator_type::const_pointer const_ptr;
+        typedef typename allocator_type::reference ref;
+        typedef typename allocator_type::const_reference const_ref;
 
-				protected:
-					Compare comp;
-					value_compare(Compare c) : comp(c) {}
+        typedef size_t size_type;
+        typedef bidirectional_iterator<true, pair_type> const_it;
+        typedef bidirectional_iterator<false, pair_type> iterator;
+        typedef typename ft::iterator_traits<iterator>::diff_type diff_type;
+        typedef ft::reverse_iterator<const_it> const_reverse_it;
+        typedef ft::reverse_iterator<iterator> reverse_it;
 
-				public:
-					bool operator()(const value_type &x, const value_type &y) const
-					{
-						return (comp(x.first, y.first));
-					}
-			};
+        class value_compare : std::binary_function<pair_type, pair_type, bool> {
+            friend class map<key_type, val_type, key_compare, Allocator>;
+
+        protected:
+            Compare compare;
+            explicit value_compare(Compare c) : compare(c) { }
+
+        public:
+            bool operator()(const pair_type &x, const pair_type &y) const {
+                return (compare(x.first, y.first));
+            }
+        };
 
 		private:
-			typedef typename allocator_type::template rebind<Node<value_type> >::other	node_allocator;
-			typedef RedBlackTree<value_type, value_compare, node_allocator>				node_container;
-			typedef Node<value_type>*													node_pointer;
-			typedef Node<value_type>&													node_reference;
-
-			node_container	_container;
-			key_compare		_compare;
-			allocator_type	_alloc;
+            typedef Node<pair_type> *node_ptr;
+            typedef Node<pair_type> &node_ref;
+            typedef typename allocator_type::template rebind<Node<pair_type> >::other node_allocator;
+            typedef RedBlackTree<pair_type, value_compare, node_allocator>				node_container;
+			node_container	container;
+			key_compare		compare;
+            allocator_type	allocator;
 
 		public:
-			explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-			: _container(node_container(value_compare(comp))), _compare(comp), _alloc(alloc)
-			{}
+            map(const map& x) : container(x.container), compare(x.compare), allocator(x.allocator) {}
+
+            explicit map(const key_compare& comp = key_compare(), const allocator_type& allocator = allocator_type()) : container(node_container(value_compare(comp))), compare(comp), allocator(allocator) { }
 
 			template <class InputIterator>
-			map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-			: _container(node_container(value_compare(comp))), _compare(comp), _alloc(alloc)
-			{
-				insert(first, last);
+			map(InputIterator f, InputIterator l, const key_compare& comp = key_compare(), const allocator_type& allocator = allocator_type()) : container(node_container(value_compare(comp))), compare(comp), allocator(allocator) {
+				insert(f, l);
 			}
 
-			map(const map& x) : _container(x._container), _compare(x._compare), _alloc(x._alloc) {}
-
-			~map()
-			{
+			~map() {
 				clear();
 			}
 
-			map& operator=(const map& x)
-			{
-				if (this != &x)
-				{
-					clear();
-					_container = x._container;
-				}
-				return (*this);
+			iterator begin() {
+				return (iterator(container.get_node_ptr(), container.get_root()));
 			}
 
-			iterator begin()
-			{
-				return (iterator(_container.get_node_ptr(), _container.get_root()));
+			const_it begin() const {
+				return (const_it(container.get_node_ptr(), container.get_root()));
 			}
 
-			const_iterator begin() const
-			{
-				return (const_iterator(_container.get_node_ptr(), _container.get_root()));
+			iterator end() {
+				return (iterator(NULL, container.get_root()));
 			}
 
-			iterator end()
-			{
-				return (iterator(NULL, _container.get_root()));
+			const_it end() const {
+				return (const_it(NULL, container.get_root()));
 			}
 
-			const_iterator end() const
-			{
-				return (const_iterator(NULL, _container.get_root()));
+			reverse_it rbegin() {
+				return (reverse_it(end()));
 			}
 
-			reverse_iterator rbegin()
-			{
-				return (reverse_iterator(end()));
+			const_reverse_it rbegin() const {
+				return (const_reverse_it(end()));
 			}
 
-			const_reverse_iterator rbegin() const
-			{
-				return (const_reverse_iterator(end()));
+			reverse_it rend() {
+				return (reverse_it(begin()));
 			}
 
-			reverse_iterator rend()
-			{
-				return (reverse_iterator(begin()));
+			const_reverse_it rend() const {
+				return (const_reverse_it(begin()));
 			}
 
-			const_reverse_iterator rend() const
-			{
-				return (const_reverse_iterator(begin()));
+			bool empty() const {
+				return (container.get_size() == 0);
 			}
 
-			bool empty() const
-			{
-				if (!_container.get_size())
-					return (true);
-				else
-					return (false);
+			size_type size() const {
+				return (container.get_size());
 			}
 
-			size_type size() const
-			{
-				return (_container.get_size());
+			size_type max_size() const {
+				return (container.get_alloc().max_size());
 			}
 
-			size_type max_size() const
-			{
-				return (_container.get_alloc().max_size());
-			}
+            const val_type& at(const key_type& k) const {
+                ft::pair< const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
+                node_ptr tmp = container.search_node(value);
+                if (!tmp)
+                    throw std::out_of_range("map");
+                return (tmp->value.second);
+            }
 
-			mapped_type& at(const key_type& k)
-			{
-				ft::pair< const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				node_pointer tmp = _container.search_node(value);
+			val_type& at(const key_type& k) {
+				ft::pair< const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
+				node_ptr tmp = container.search_node(value);
 				if (!tmp)
 					throw std::out_of_range("map");
 				return (tmp->value.second);
 			}
 
-			const mapped_type& at(const key_type& k) const
-			{
-				ft::pair< const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				node_pointer tmp = _container.search_node(value);
-				if (!tmp)
-					throw std::out_of_range("map");
-				return (tmp->value.second);
-			}
+            map& operator=(const map& map) {
+                if (this != &map) {
+                    clear();
+                    container = map.container;
+                }
+                return (*this);
+            }
 
-			mapped_type& operator[](const key_type& k)
-			{
-				ft::pair< const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
+			val_type& operator[](const key_type& key) {
+				ft::pair< const key_type, val_type> value = ft::make_pair<const key_type, val_type>(key, val_type());
 				return insert(value).first->second;
 			}
 
-			pair<iterator,bool> insert(const value_type& val)
-			{
-				bool b_insert;
-				node_pointer tmp = _container.insert(val, &b_insert);
-				return (ft::make_pair<iterator, bool>(iterator(tmp, _container.get_root()), b_insert));
+			pair<iterator,bool> insert(const pair_type& val) {
+				bool b;
+				node_ptr tmp = container.insert(val, &b);
+				return (ft::make_pair<iterator, bool>(iterator(tmp, container.get_root()), b));
 			}
 
-			iterator insert(iterator position, const value_type& val)
-			{
-				return iterator(_container.insert(position.base(), val), _container.get_root());
-			}
 
-			template <class InputIterator>
-			void insert(InputIterator first, InputIterator last)
-			{
-				while (first != last)
-				{
-					insert(*first);
-					++first;
+			template <class InIt>
+			void insert(InIt f, InIt l) {
+				while (f != l) {
+					insert(*f);
+					f++;
 				}
 			}
 
-			void erase(iterator position)
-			{
-				_container.erase(position.base());
+            iterator insert(iterator pos, const pair_type& pair) {
+                return iterator(container.insert(pos.base(), pair), container.get_root());
+            }
+
+            size_type erase(const key_type& key) {
+                ft::pair<const key_type, val_type> pair = ft::make_pair<const key_type, val_type>(key, val_type());
+                return (container.erase(pair));
+            }
+
+            void erase(iterator pos) {
+				container.erase(pos.base());
 			}
 
-			size_type erase(const key_type& k)
-			{
-				ft::pair<const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				return (_container.erase(value));
-			}
-
-			void erase(iterator first, iterator last)
-			{
-				for(iterator it; first != last;)
-				{
-					it = first++;
+			void erase(iterator f, iterator l) {
+				for(iterator it; f != l;) {
+					it = f++;
 					erase(it);
 				}
 			}
 
-			void swap(map& x)
-			{
-				_container.swap(x._container);
+            void clear() {
+                container.clear();
+            }
+
+			void swap(map& map) {
+				container.swap(map.container);
 			}
 
-			void clear()
-			{
-				_container.clear();
+			key_compare key_comp() const {
+				return (compare);
 			}
 
-			key_compare key_comp() const
-			{
-				return (this->_compare);
-			}
-
-			value_compare value_comp() const
-			{
+			value_compare value_comp() const {
 				return (value_compare(key_compare()));
 			}
 
-			iterator find (const key_type& k)
-			{
-				ft::pair<const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				return (iterator(_container.search_node(value), _container.get_root()));
+			iterator find (const key_type& key) {
+				ft::pair<const key_type, val_type> pair = ft::make_pair<const key_type, val_type>(key, val_type());
+				return (iterator(container.search_node(pair), container.get_root()));
 			}
 
-			const_iterator find (const key_type& k) const
+			const_it find (const key_type& k) const
 			{
-				ft::pair<const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				return (const_iterator(_container.search_node(value), _container.get_root()));
+				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
+				return (const_it(container.search_node(value), container.get_root()));
 			}
 
 			size_type count (const key_type& k) const
 			{
-				ft::pair<const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				if (_container.search_node(value))
+				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
+				if (container.search_node(value))
 					return (1);
 				else
 					return (0);
@@ -252,37 +213,37 @@ namespace ft
 
 			iterator lower_bound (const key_type& k)
 			{
-				ft::pair<const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				node_pointer other = NULL;
-				_container.lower(value, _container.get_root(), &other);
-				return (iterator(other, _container.get_root()));
+				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
+				node_ptr other = NULL;
+				container.lower(value, container.get_root(), &other);
+				return (iterator(other, container.get_root()));
 			}
 
-			const_iterator lower_bound(const key_type& k) const
+			const_it lower_bound(const key_type& k) const
 			{
-				ft::pair<const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				node_pointer other = NULL;
-				_container.lower(value, _container.get_root(), &other);
-				return (const_iterator(other, _container.get_root()));
+				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
+				node_ptr other = NULL;
+				container.lower(value, container.get_root(), &other);
+				return (const_it(other, container.get_root()));
 			}
 
 			iterator upper_bound(const key_type& k)
 			{
-				node_pointer sougth = NULL;
-				ft::pair<const key_type, mapped_type> p = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				_container.upper(p, _container.get_root(), &sougth);
-				return iterator(sougth, _container.get_root());
+				node_ptr sougth = NULL;
+				ft::pair<const key_type, val_type> p = ft::make_pair<const key_type, val_type>(k, val_type());
+				container.upper(p, container.get_root(), &sougth);
+				return iterator(sougth, container.get_root());
 			}
 
-			const_iterator upper_bound(const key_type& k) const
+			const_it upper_bound(const key_type& k) const
 			{
-				ft::pair<const key_type, mapped_type> value = ft::make_pair<const key_type, mapped_type>(k, mapped_type());
-				node_pointer other = NULL;
-				_container.upper(value, _container.get_root(), &other);
-				return (const_iterator(other, _container.get_root()));
+				ft::pair<const key_type, val_type> value = ft::make_pair<const key_type, val_type>(k, val_type());
+				node_ptr other = NULL;
+				container.upper(value, container.get_root(), &other);
+				return (const_it(other, container.get_root()));
 			}
 
-			pair<const_iterator,const_iterator> equal_range(const key_type& k) const
+			pair<const_it,const_it> equal_range(const key_type& k) const
 			{
 				return ft::make_pair(lower_bound(k), upper_bound(k));
 			}
@@ -294,7 +255,7 @@ namespace ft
 
 			allocator_type get_allocator() const
 			{
-				return (this->_alloc);
+				return (this->allocator);
 			}
 	};
 
