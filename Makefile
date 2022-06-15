@@ -1,29 +1,31 @@
-NAME = containers
+SRCS		= main.cpp tester_vector.cpp tester_stack.cpp tester_map.cpp
 
-SRC = main.cpp
-HEAD = Stack.hpp
+OBJS		= ${SRCS:.cpp=.o}
 
-OBJS = $(SRC:.cpp=.o)
+HEADERS		= vector.hpp stack.hpp vector_iterator.hpp utils.hpp utils.hpp reverse_iterator.hpp RedBlackTree.hpp node_tree.hpp map.hpp ft_is_integral.hpp bidirectional_iterator.hpp tester_headers.hpp
 
-CXX = clang++
-RM = rm -rf
+NAME		= ft_container
 
-FLAGS = -Wall -Wextra -Werror -std=c++98
+CPP			= clang++
 
-%.o: %.cpp	$(HEAD) Makefile
-			@$(CXX) $(FLAGS) -c $< -o $@
+RM			= rm -rf
 
-all:		$(NAME)
+CPPFLAGS	= -Wall -Wextra -Werror -std=c++98 -Wshadow -Wno-shadow
 
-$(NAME):	$(OBJS) $(HEAD)
-			$(CXX) $(CFLAGS) $(OBJS) -o $(NAME)
+all:		${NAME}
+
+%.o:		%.cpp ${HEADER}
+			${CPP} ${CPPFLAGS} -I ./ -c $< -o $@
+
+${NAME}:	${OBJS} ${HEADER}
+			${CPP} ${CPPFLAGS} ${OBJS} -o ${NAME}
 
 clean:
-			@$(RM) $(OBJS)
+			${RM} ${OBJS}
 
 fclean:		clean
-			@$(RM) $(NAME)
+			${RM} ${NAME}
 
 re:			fclean all
 
-.PHONY: 	all run clean fclean re
+.PHONY:		all clean fclean re

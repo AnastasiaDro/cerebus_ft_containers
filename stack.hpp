@@ -17,7 +17,6 @@ namespace ft {
         typedef typename Container::value_type value_type;
         typedef typename Container::size_type size_type;
 
-        //нужен ли здесь второй конструктор
         explicit stack(const container_type &cont = container_type()) : container(cont) {}
 
         //template functions
