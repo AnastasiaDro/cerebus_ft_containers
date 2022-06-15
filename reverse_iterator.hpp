@@ -13,9 +13,9 @@ namespace ft
 			typedef T													iterator_type;
 			typedef typename ft::iterator_traits<T>::iterator_category	iterator_category;
 			typedef typename ft::iterator_traits<T>::value_type			value_type;
-			typedef typename ft::iterator_traits<T>::difference_type	difference_type;
-			typedef typename ft::iterator_traits<T>::pointer			pointer;
-			typedef typename ft::iterator_traits<T>::reference			reference;
+			typedef typename ft::iterator_traits<T>::diff_type	diff_type;
+			typedef typename ft::iterator_traits<T>::ptr			ptr;
+			typedef typename ft::iterator_traits<T>::ref			ref;
 
 			reverse_iterator();
 			explicit reverse_iterator(iterator_type it);
@@ -24,17 +24,17 @@ namespace ft
 			~reverse_iterator();
 
 			iterator_type base() const;
-			reference operator*() const;
-			reverse_iterator operator+(difference_type nbr) const;
+			ref operator*() const;
+			reverse_iterator operator+(diff_type nbr) const;
 			reverse_iterator operator++(int);
 			reverse_iterator &operator++();
-			reverse_iterator &operator+=(difference_type nbr);
-			reverse_iterator operator-(difference_type nbr) const;
+			reverse_iterator &operator+=(diff_type nbr);
+			reverse_iterator operator-(diff_type nbr) const;
 			reverse_iterator operator--(int);
 			reverse_iterator &operator--();
-			reverse_iterator &operator-=(difference_type nbr);
-			pointer operator->() const;
-			reference operator[](difference_type nbr);
+			reverse_iterator &operator-=(diff_type nbr);
+			ptr operator->() const;
+			ref operator[](diff_type nbr);
 			template<typename R_T>
 			reverse_iterator &operator=(reverse_iterator<R_T> const &copy);
 
@@ -63,14 +63,14 @@ namespace ft
 	}
 
 	template<typename T>
-	typename reverse_iterator<T>::reference reverse_iterator<T>::operator*() const
+	typename reverse_iterator<T>::ref reverse_iterator<T>::operator*() const
 	{
 		iterator_type tmp = this->iter;
 		return (*(--tmp));
 	}
 
 	template<typename T>
-	reverse_iterator<T> reverse_iterator<T>::operator+(reverse_iterator<T>::difference_type nbr) const
+	reverse_iterator<T> reverse_iterator<T>::operator+(reverse_iterator<T>::diff_type nbr) const
 	{
 		return (reverse_iterator(this->iter - nbr));
 	}
@@ -91,14 +91,14 @@ namespace ft
 	}
 
 	template <typename T>
-	reverse_iterator<T> &reverse_iterator<T>::operator+=(difference_type nbr)
+	reverse_iterator<T> &reverse_iterator<T>::operator+=(diff_type nbr)
 	{
 		iter -= nbr;
 		return *this;
 	}
 
 	template <typename T>
-	reverse_iterator<T> reverse_iterator<T>::operator-(difference_type nbr) const
+	reverse_iterator<T> reverse_iterator<T>::operator-(diff_type nbr) const
 	{
 		reverse_iterator<T> copy(*this);
 		copy -= nbr;
@@ -122,20 +122,20 @@ namespace ft
 	}
 
 	template <typename T>
-	reverse_iterator<T> &reverse_iterator<T>::operator-=(difference_type nbr)
+	reverse_iterator<T> &reverse_iterator<T>::operator-=(diff_type nbr)
 	{
 		*this += -nbr;
 		return *this;
 	}
 
 	template<typename T>
-	typename reverse_iterator<T>::pointer reverse_iterator<T>::operator->() const
+	typename reverse_iterator<T>::ptr reverse_iterator<T>::operator->() const
 	{
 		return (&(operator*()));
 	}
 
 	template <typename T>
-	typename reverse_iterator<T>::reference reverse_iterator<T>::operator[](difference_type n)
+	typename reverse_iterator<T>::ref reverse_iterator<T>::operator[](diff_type n)
 	{
 		return (*this).base()[-n - 1];
 	}
@@ -191,7 +191,7 @@ namespace ft
 	}
 
 	template<typename T>
-	reverse_iterator<T> operator+(typename reverse_iterator<T>::difference_type nbr, reverse_iterator<T> const &rev_it)
+	reverse_iterator<T> operator+(typename reverse_iterator<T>::diff_type nbr, reverse_iterator<T> const &rev_it)
 	{
 		reverse_iterator<T> copy(rev_it);
 		copy += nbr;
@@ -199,7 +199,7 @@ namespace ft
 	}
 
 	template <typename T, typename T1>
-	typename reverse_iterator<T>::difference_type operator-(const reverse_iterator<T> &lhs, const reverse_iterator<T1> &rhs)
+	typename reverse_iterator<T>::diff_type operator-(const reverse_iterator<T> &lhs, const reverse_iterator<T1> &rhs)
 	{
 		return rhs.base() - lhs.base();
 	}

@@ -45,30 +45,30 @@ namespace ft
 	template <typename Iterator>
 	class iterator_traits {
 		public:
-			typedef typename Iterator::difference_type		difference_type;
+			typedef typename Iterator::difference_type		diff_type;
 			typedef typename Iterator::value_type			value_type;
-			typedef typename Iterator::pointer				pointer;
-			typedef typename Iterator::reference			reference;
+			typedef typename Iterator::pointer				ptr;
+			typedef typename Iterator::reference			ref;
 			typedef typename Iterator::iterator_category	iterator_category;
 	};
 
 	template <typename T>
 	class iterator_traits<T*> {
 		public:
-			typedef ptrdiff_t							difference_type;
+			typedef ptrdiff_t							diff_type;
 			typedef T									value_type;
-			typedef T*									pointer;
-			typedef T&									reference;
+			typedef T*									ptr;
+			typedef T&									ref;
 			typedef std::random_access_iterator_tag		iterator_category;
 	};
 
 	template <typename T>
 	class iterator_traits<const T*> {
 		public:
-			typedef ptrdiff_t						difference_type;
+			typedef ptrdiff_t						diff_type;
 			typedef T								value_type;
-			typedef const T*						pointer;
-			typedef const T&						reference;
+			typedef const T*						ptr;
+			typedef const T&						ref;
 			typedef std::random_access_iterator_tag	iterator_category;
 	};
 
@@ -85,23 +85,18 @@ namespace ft
 		typedef T2 type;
 	};
 
+    template <class InIt>
+    size_t	distance(InIt start, InIt end) {
+        size_t i = 0;
+        for (InIt it = start; it != end; it++)
+            i++;
+        return (i);
+    }
+
 	template <typename T1, typename T2>
 	struct conditional<true, T1, T2> {
 		typedef T1 type;
 	};
-
-	template <class InIt>
-	size_t	distance(InIt first, InIt second) {
-		size_t i = 0;
-		for (InIt it = first; it != second; it++)
-			i++;
-		return (i);
-	}
-
-	template <class T>
-	const T& max(const T &a, const T &b) {
-		return (a < b) ? b : a;
-	}
 
 	template <class T>
     void swap(T &a, T &b) {
@@ -110,7 +105,13 @@ namespace ft
         b = c;
     }
 
-	template <class T1, class T2>
+    template <class T>
+    const T& max(const T &a, const T &b) {
+        return (a < b) ? b : a;
+    }
+
+
+    template <class T1, class T2>
 	struct pair {
 	public:
 		typedef T1 first_type;
@@ -149,31 +150,33 @@ namespace ft
 		return (lhs.first == rhs.first && lhs.second == rhs.second);
 	}
 
-	template <class T1, class T2>
-	bool operator!=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
-		return (!(lhs == rhs));
-	}
 
 	template <class T1, class T2>
 	bool operator<(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
-		if (lhs.first < rhs.first)
-			return (true);
-		else if (rhs.first < lhs.first)
-			return (false);
-		else if (lhs.second < rhs.second)
-			return (true);
-		else
-			return (false);
+		if (lhs.first < rhs.first) {
+            return (true);
+        } else if (rhs.first < lhs.first) {
+            return (false);
+        } else if (lhs.second < rhs.second) {
+            return (true);
+        } else {
+            return (false);
+        }
 	}
+
+    template <class T1, class T2>
+    bool operator!=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
+        return !(rhs == lhs);
+    }
+
+    template <class T1, class T2>
+    bool operator>(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
+        return (rhs < lhs);
+    }
 
 	template <class T1, class T2>
 	bool operator<=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
 		return (!(rhs < lhs));
-	}
-
-	template <class T1, class T2>
-	bool operator>(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
-		return (rhs < lhs);
 	}
 
 	template <class T1, class T2>

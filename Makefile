@@ -2,7 +2,7 @@ SRCS		= main.cpp tester_vector.cpp tester_stack.cpp tester_map.cpp
 
 OBJS		= ${SRCS:.cpp=.o}
 
-HEADERS		= vector.hpp stack.hpp vector_iterator.hpp utils.hpp utils.hpp reverse_iterator.hpp RedBlackTree.hpp node_tree.hpp map.hpp ft_is_integral.hpp bidirectional_iterator.hpp tester_headers.hpp
+HEADER		= vector.hpp stack.hpp vector_iterator.hpp utils.hpp utils.hpp reverse_iterator.hpp RedBlackTree.hpp node_tree.hpp map.hpp ft_is_integral.hpp bidirectional_iterator.hpp tester_headers.hpp
 
 NAME		= ft_container
 
