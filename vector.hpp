@@ -23,7 +23,7 @@ namespace ft {
         typedef typename allocator_type::const_pointer const_pointer;
         typedef typename allocator_type::reference reference;
         typedef typename allocator_type::const_reference const_reference;
-        typedef typename allocator_type::value_type value_type;
+        typedef T value_type;
 		typedef ft::vector_iterator<false, value_type>		iterator;
 		typedef ft::vector_iterator<true, value_type>		const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
@@ -40,7 +40,7 @@ namespace ft {
     public:
         template <class InputIterator>
         vector (InputIterator first, InputIterator last, const allocator_type& a = allocator_type(),
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : array(0), arr_size(0), arr_capacity(0), allocator(a){
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : array(0), arr_capacity(0), arr_size(0), allocator(a){
             allocator = a;
             insert(begin(), first, last);
         }
@@ -299,7 +299,7 @@ namespace ft {
                 }
 
                 for (size_type i = 0; i < arr_size; i++)
-                    allocator.destroy(&this->_array[i]);
+                    allocator.destroy(&this->array[i]);
                 if (array)
                     allocator.deallocate(array, arr_capacity);
                 arr_size += n;

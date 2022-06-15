@@ -52,15 +52,15 @@ namespace ft {
             return (*this);
         }
 
-        allocator_type getalloc() const {
+        allocator_type get_alloc() const {
             return (allocator);
         }
 
-        pointer getroot() const {
+        pointer get_root() const {
             return (root);
         }
 
-        pointer getnode_p() const {
+        pointer getnode_ptr() const {
             return (node_p);
         }
 
