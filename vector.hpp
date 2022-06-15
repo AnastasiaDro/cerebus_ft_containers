@@ -46,20 +46,20 @@ namespace ft {
         }
 
 
-        explicit vector(const allocator_type& a1 = allocator_type())  : array(NULL), arr_size(0), arr_capacity(0), allocator(a1) {}
+        explicit vector(const allocator_type& a1 = allocator_type())  : array(NULL), arr_capacity(0), arr_size(0), allocator(a1) {}
 
         explicit vector(size_type n) : arr_capacity((int)(n * 1.5)), arr_size(n), array(NULL) {
 			array = allocator.allocate(arr_capacity);
 		}
 
-        explicit vector(size_type n, const T& x = T(), const A& a1 = allocator_type()) : arr_size(n), arr_capacity(n), allocator(a1) {
+		explicit vector(size_type n, const T& x = T(), const A& a1 = allocator_type()) : arr_capacity(n), arr_size(n), allocator(a1) {
 			array = allocator.allocate(n);
-			for (int i = 0; i < n; ++i) {
+			for (size_type i = 0; i < n; ++i) {
 				allocator.construct(&array[i], x);
 			}
 		}
 
-        vector(const vector& x) : array(NULL), arr_size(0), arr_capacity(0), allocator(x.allocator) {
+		vector(const vector& x) : array(NULL), arr_capacity(0), arr_size(0), allocator(x.allocator) {
 			insert(begin(), x.begin(), x.end());
 		}
 
@@ -137,7 +137,7 @@ namespace ft {
                 allocator.construct(&array[arr_size], val);
             for (size_type i = n; i < arr_capacity; ++i)
                 allocator.destroy(&array[i]);
-            this->_size = n;
+            arr_size = n;
         }
         size_type size() const {
 			return arr_size;

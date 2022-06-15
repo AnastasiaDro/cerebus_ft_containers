@@ -60,7 +60,7 @@ namespace ft {
             return (root);
         }
 
-        pointer getnode_ptr() const {
+        pointer get_node_ptr() const {
             return (node_p);
         }
 

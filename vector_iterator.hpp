@@ -18,8 +18,14 @@ namespace ft
 		typedef typename std::iterator<std::random_access_iterator_tag, T>::value_type   value_type;
 		typedef typename std::iterator<std::random_access_iterator_tag, T>::difference_type  difference_type;
 
-		vector_iterator();
-		vector_iterator(const vector_iterator &it);
+	private:
+	    pointer ptr;
+
+    public:
+		vector_iterator() : ptr(T()) {}
+		explicit vector_iterator(const T &p) : ptr(p) {}
+		vector_iterator(const vector_iterator &it) : ptr(it.ptr) {}
+
 		~vector_iterator();
 
 		vector_iterator<bo, T> & operator=(const vector_iterator &it);
@@ -41,24 +47,24 @@ namespace ft
 
 		template <bool B1, bool B2, typename U>
 		friend bool operator<=(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs) {
-		    return lhs.ptr <= rhs.ptr;
+		    return (lhs.ptr <= rhs.ptr);
 		}
 
 		template <bool B1, bool B2, typename U>
 		friend bool operator>(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs) {
-		    return lhs.ptr > rhs.ptr;
+		    return (lhs.ptr > rhs.ptr);
 		}
 
 		template <bool B1, bool B2, typename U>
 		friend bool operator>=(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs)
 		{
-		return lhs.ptr >= rhs.ptr;
+		return (lhs.ptr >= rhs.ptr);
 		}
 
 		template <bool B1, bool B2, typename U>
 		friend bool operator==(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs)
 		{
-		return lhs.ptr == rhs.ptr;
+		return (lhs.ptr == rhs.ptr);
 		}
 
 		template <bool B1, bool B2, typename U>
@@ -79,16 +85,13 @@ namespace ft
 		operator vector_iterator<true, value_type>() const {
 			return vector_iterator<true, value_type>(ptr);
 		}
-
-	private:
-		pointer ptr;
 	};
 
-	template <bool B, typename T>
-	vector_iterator<B, T>::vector_iterator() : ptr(NULL) {};
-
-	template <bool B, typename T>
-	vector_iterator<B, T>::vector_iterator(const vector_iterator &it) : ptr(it.ptr) {};
+//	template <bool B, typename T>
+//	vector_iterator<B, T>::vector_iterator() : ptr(NULL) {}
+//
+//	template <bool B, typename T>
+//	vector_iterator<B, T>::vector_iterator(const vector_iterator &it) : ptr(it.ptr) {}
 
 	template <bool B, typename T>
 	vector_iterator<B, T>::~vector_iterator() {};
