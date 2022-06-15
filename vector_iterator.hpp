@@ -35,21 +35,18 @@ namespace ft
 		vector_iterator<bo, T>  operator-(difference_type n) const;
 
 		template <bool B1, bool B2, typename U>
-		friend bool operator<(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs)
-		{
-		return lhs.ptr < rhs.ptr;
+		friend bool operator<(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs) {
+		    return lhs.ptr < rhs.ptr;
 		}
 
 		template <bool B1, bool B2, typename U>
-		friend bool operator<=(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs)
-		{
-		return lhs.ptr <= rhs.ptr;
+		friend bool operator<=(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs) {
+		    return lhs.ptr <= rhs.ptr;
 		}
 
 		template <bool B1, bool B2, typename U>
-		friend bool operator>(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs)
-		{
-		return lhs.ptr > rhs.ptr;
+		friend bool operator>(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs) {
+		    return lhs.ptr > rhs.ptr;
 		}
 
 		template <bool B1, bool B2, typename U>
@@ -65,25 +62,21 @@ namespace ft
 		}
 
 		template <bool B1, bool B2, typename U>
-		friend bool operator!=(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs)
-		{
-		return lhs.ptr != rhs.ptr;
+		friend bool operator!=(const vector_iterator<B1, U> &lhs, const vector_iterator<B2, U> &rhs) {
+		    return lhs.ptr != rhs.ptr;
 		}
 
 		template <bool B1, bool B2, typename U>
-		friend difference_type operator-(const vector_iterator<B1, U> &it, const vector_iterator<B2, U> &it1)
-		{
+		friend difference_type operator-(const vector_iterator<B1, U> &it, const vector_iterator<B2, U> &it1) {
 			difference_type n;
 			n = it.ptr - it1.ptr;
-
 			return n;
 		}
 
 		reference operator[](difference_type n);
 		explicit vector_iterator(pointer p);
 
-		operator vector_iterator<true, value_type>() const
-		{
+		operator vector_iterator<true, value_type>() const {
 			return vector_iterator<true, value_type>(ptr);
 		}
 
@@ -101,66 +94,57 @@ namespace ft
 	vector_iterator<B, T>::~vector_iterator() {};
 
 	template <bool B, typename T>
-	typename vector_iterator<B, T>::reference vector_iterator<B, T>::operator*() const
-	{
+	typename vector_iterator<B, T>::reference vector_iterator<B, T>::operator*() const {
 		return *ptr;
 	}
 
 	template <bool B, typename T>
-	typename vector_iterator<B, T>::pointer vector_iterator<B, T>::operator->() const
-	{
+	typename vector_iterator<B, T>::pointer vector_iterator<B, T>::operator->() const {
 		return &(operator*());
 	}
 
 	template <bool B, typename T>
-	vector_iterator<B, T> &vector_iterator<B, T>::operator=(const vector_iterator &it)
-	{
+	vector_iterator<B, T> &vector_iterator<B, T>::operator=(const vector_iterator &it) {
 		if (it != *this)
 		ptr = it.ptr;
 		return *this;
 	}
 
 	template <bool B, typename T>
-	vector_iterator<B, T> &vector_iterator<B, T>::operator+=(difference_type n)
-	{
+	vector_iterator<B, T> &vector_iterator<B, T>::operator+=(difference_type n) {
 		this->ptr += n;
 		return *this;
 	}
 
 	template <bool B, typename T>
-	vector_iterator<B, T> &vector_iterator<B, T>::operator++()
-	{
+	vector_iterator<B, T> &vector_iterator<B, T>::operator++() {
 		*this += 1;
 		return *this;
 	}
 
 	template <bool B, typename T>
-	vector_iterator<B, T> vector_iterator<B, T>::operator++(int)
-	{
+	vector_iterator<B, T> vector_iterator<B, T>::operator++(int) {
 		vector_iterator<B, T> temp(*this);
 		*this += 1;
 		return temp;
 	}
 
 	template <bool B, typename T>
-	vector_iterator<B, T> vector_iterator<B, T>::operator+(difference_type n) const
-	{
+	vector_iterator<B, T> vector_iterator<B, T>::operator+(difference_type n) const {
 		vector_iterator<B, T> temp(*this);
 		temp += n;
 		return temp;
 	}
 
 	template <bool B, typename T>
-	vector_iterator<B, T> operator+(typename vector_iterator<B, T>::difference_type n, const vector_iterator<B, T> &it)
-	{
+	vector_iterator<B, T> operator+(typename vector_iterator<B, T>::difference_type n, const vector_iterator<B, T> &it) {
 		vector_iterator<B, T> temp(it);
 		temp += n;
 		return temp;
 	}
 
 	template <bool B, typename T>
-	vector_iterator<B, T> &vector_iterator<B, T>::operator-=(difference_type n)
-	{
+	vector_iterator<B, T> &vector_iterator<B, T>::operator-=(difference_type n) {
 		*this += -n;
 		return *this;
 	}
@@ -199,4 +183,3 @@ namespace ft
 }
 
 #endif
-

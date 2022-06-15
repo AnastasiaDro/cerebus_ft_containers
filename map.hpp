@@ -58,16 +58,16 @@ namespace ft
 
 		public:
 			explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-			: container(node_container(value_compare(comp))), compare(comp), alloc(alloc)
+			: container(node_container(value_compare(comp))), compare(comp), allocator(alloc)
 			{}
 
 			template <class InputIterator>
 			map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-			: container(node_container(value_compare(comp))), compare(comp), alloc(alloc) {
+			: container(node_container(value_compare(comp))), compare(comp), allocator(alloc) {
 				insert(first, last);
 			}
 
-			map(const map& x) : container(x.container), compare(x.compare), alloc(x.alloc) {}
+			map(const map& x) : container(x.container), compare(x.compare), allocator(x.allocator) {}
 
 			~map() {
 				clear();

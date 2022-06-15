@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/containers_42.dir/main.cpp.o"
-  "CMakeFiles/containers_42.dir/main.cpp.o.d"
   "containers_42"
   "containers_42.pdb"
 )

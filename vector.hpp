@@ -9,6 +9,7 @@
 #include <memory>
 #include "vector_iterator.hpp"
 #include "reverse_iterator.hpp"
+#include "vector_iterator.hpp"
 #include "ft_is_integral.hpp"
 
 namespace ft {
@@ -39,25 +40,16 @@ namespace ft {
     public:
         template <class InputIterator>
         vector (InputIterator first, InputIterator last, const allocator_type& a = allocator_type(),
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : array(NULL), arr_size(0), arr_capacity(0), allocator(a){
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : array(0), arr_size(0), arr_capacity(0), allocator(a){
             allocator = a;
             insert(begin(), first, last);
         }
 
-        vector(): array(NULL), arr_capacity(0), arr_size(0) {}
 
-        explicit vector(const allocator_type& a1 = allocator_type())  : array(NULL), arr_size(0), arr_capacity(0), allocator_type(a1) {}
+        explicit vector(const allocator_type& a1 = allocator_type())  : array(NULL), arr_size(0), arr_capacity(0), allocator(a1) {}
 
         explicit vector(size_type n) : arr_capacity((int)(n * 1.5)), arr_size(n), array(NULL) {
 			array = allocator.allocate(arr_capacity);
-		}
-
-        explicit vector(size_type n, const T& x = T()): arr_size(n), arr_capacity((int)(n * 1.5)) {
-			allocator = allocator_type();
-			array = allocator.allocate(arr_capacity);
-			for (int i = 0; i < n; ++i) {
-				allocator.construct(&array[i], x);
-			}
 		}
 
         explicit vector(size_type n, const T& x = T(), const A& a1 = allocator_type()) : arr_size(n), arr_capacity(n), allocator(a1) {
@@ -67,7 +59,7 @@ namespace ft {
 			}
 		}
 
-        vector(const vector& x) : array(NULL), arr_size(0), arr_capacity(0), allocator_type(x.allocator_type) {
+        vector(const vector& x) : array(NULL), arr_size(0), arr_capacity(0), allocator(x.allocator) {
 			insert(begin(), x.begin(), x.end());
 		}
 
@@ -85,10 +77,8 @@ namespace ft {
             {
                 size_type i = 0;
                 pointer new_array = allocator.allocate(n);
-                try
-                {
-                    for (i = 0; i < arr_size; ++i)
-                    {
+                try {
+                    for (i = 0; i < arr_size; ++i) {
                         allocator.construct(&new_array[i], array[i]);
                     }
                 }
@@ -278,8 +268,8 @@ namespace ft {
                 allocator.destroy(&(*it) + n);
                 allocator.construct((&(*it) + n), *it);
                 for (size_type j = 0; j != n; ++j, ++it) {
-                    this->_allocator.destroy(&(*it));
-                    this->_allocator.construct(&(*it), x);
+                    allocator.destroy(&(*it));
+                    allocator.construct(&(*it), x);
                 }
                 arr_size += n;
             }
@@ -308,7 +298,7 @@ namespace ft {
                     throw;
                 }
 
-                for (size_type i = 0; i < this->_size; i++)
+                for (size_type i = 0; i < arr_size; i++)
                     allocator.destroy(&this->_array[i]);
                 if (array)
                     allocator.deallocate(array, arr_capacity);
