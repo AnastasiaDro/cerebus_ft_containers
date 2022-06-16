@@ -179,85 +179,61 @@ namespace ft
 				}
 			}
 
-			reference operator[] (size_type n)
-			{
-				return (this->_array[n]);
+			reference operator[] (size_type n) {
+				return (_array[n]);
 			}
 
-			const_reference operator[] (size_type n) const
-			{
-				return (this->_array[n]);
+			const_reference operator[] (size_type n) const {
+				return (_array[n]);
 			}
 
-			reference at (size_type n)
-			{
-				if (n > this->_size)
-					throw std::out_of_range("vector::at()");
-				return (reference(this->_array[n]));
+			reference front() {
+				return *(_array);
 			}
 
-			const_reference at (size_type n) const
-			{
-				if (n > this->_size)
-					throw std::out_of_range("vector::at()");
-				return (const_reference(this->_array[n]));
+			const_reference front() const {
+				return *(_array);
 			}
 
-			reference front()
-			{
-				return *(this->_array);
+			reference back() {
+				return *(_array + (_size - 1));
 			}
 
-			const_reference front() const
-			{
-				return *(this->_array);
+			const_reference back() const {
+				return *(_array + (_size - 1));
 			}
 
-			reference back()
-			{
-				return *(this->_array + (this->_size - 1));
-			}
+            reference at (size_type n)
+            {
+                if (n > this->_size)
+                    throw std::out_of_range("vector::at()");
+                return (reference(this->_array[n]));
+            }
 
-			const_reference back() const
-			{
-				return *(this->_array + (this->_size - 1));
-			}
+            const_reference at (size_type n) const {
+                if (n > _size)
+                    throw std::out_of_range("vector::at()");
+                return (const_reference(this->_array[n]));
+            }
 
-			template <class InputIterator>
-			void assign (InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value>::type* = 0)
-			{
+			template <class InIt>
+			void assign (InIt first, InIt last, typename enable_if<!is_integral<InIt>::value>::type* = 0) {
 				size_type new_size = 0;
-				for (size_type i = 0; i < this->_size; ++i)
-					this->_allocator.destroy(&this->_array[i]);
-				for (InputIterator it = first; it != last; ++it)
+				for (size_type i = 0; i < _size; ++i)
+					_allocator.destroy(&this->_array[i]);
+				for (InIt it = first; it != last; ++it)
 					new_size += 1;
 				if (new_size > max_size())
 					reserve(new_size);
-				if (this->_capacity < new_size)
-				{
-					this->_allocator.deallocate(this->_array, this->_capacity);
-					this->_capacity = new_size;
-					this->_array = this->_allocator.allocate(this->_capacity);
+				if (_capacity < new_size) {
+					_allocator.deallocate(_array, _capacity);
+					_capacity = new_size;
+					_array = _allocator.allocate(_capacity);
 				}
 				int i = 0;
-				for (InputIterator it = first; it != last; ++it, ++i)
-					this->_allocator.construct(&this->_array[i], *it);
-				this->_size = new_size;
-			}
-
-			void assign (size_type n, const value_type& val)
-			{
-				for (size_type i = 0; i < this->_size; ++i)
-						this->_allocator.destroy(&this->_array[i]);
-				if (n > this->_capacity)
-				{
-					this->_allocator.deallocate(this->_array, this->_capacity);
-					this->_capacity = n;
-					this->_array = this->_allocator.allocate(n);
-				}
-				for (size_type i = 0; i < n; ++i)
-					this->_allocator.construct(&this->_array[i], val);
-				this->_size = n;
+				for (InIt it = first; it != last; it++, i++)
+					_allocator.construct(&this->_array[i], *it);
+				_size = new_size;
 			}
 
 			void pop_back() {
@@ -267,6 +243,20 @@ namespace ft
 
             void push_back (const value_type& x) {
                 insert(end(), x);
+            }
+
+            void assign (size_type n, const value_type& x) {
+                for (size_type i = 0; i < _size; i++)
+                    _allocator.destroy(&this->_array[i]);
+                if (n > _capacity)
+                {
+                    _allocator.deallocate(_array, _capacity);
+                    _capacity = n;
+                    _array = _allocator.allocate(n);
+                }
+                for (size_type i = 0; i < n; i++)
+                    _allocator.construct(&this->_array[i], x);
+                _size = n;
             }
 
 			void insert (iterator pos, size_type n, const value_type& x) {
