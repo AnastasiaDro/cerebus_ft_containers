@@ -7,11 +7,9 @@
 #include "reverse_iterator.hpp"
 #include "ft_is_integral.hpp"
 
-namespace ft
-{
+namespace ft {
 	template < class T, class Alloc = std::allocator<T> >
-	class vector
-	{
+	class vector {
 		public:
 			typedef T											value_type;
 			typedef Alloc										allocator_type;
@@ -28,107 +26,87 @@ namespace ft
 
 			explicit vector (const allocator_type& alloc = allocator_type()) : _array(NULL), _size(0), _capacity(0), _allocator(alloc) {}
 
-
-			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
-			_size(n), _capacity(n), _allocator(alloc)
-			{
+			explicit vector (size_type n, const value_type& x = value_type(), const allocator_type& allocator = allocator_type()) :
+			_size(n), _capacity(n), _allocator(allocator) {
 					_array = _allocator.allocate(_capacity);
 					for (size_type i = 0; i < n; ++i)
-						_allocator.construct(&_array[i], val);
+						_allocator.construct(&_array[i], x);
 			}
 
-			template <class InputIterator>
-			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
-			typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = 0) : _array(NULL), _size(0), _capacity(0), _allocator(alloc)
-			{
-				_allocator = alloc;
+			template <class InIt>
+			vector (InIt first, InIt last, const allocator_type& allocator = allocator_type(),
+			typename ft::enable_if<!ft::is_integral<InIt>::value, InIt>::type* = 0) : _array(NULL), _size(0), _capacity(0), _allocator(allocator) {
+				_allocator = allocator;
 				insert(begin(), first, last);
 			}
 
-			vector (const vector& x) : _array(NULL), _size(0), _capacity(0), _allocator(x._allocator)
-			{
-				insert(begin() ,x.begin(), x.end());
+			vector (const vector& vect) : _array(NULL), _size(0), _capacity(0), _allocator(vect._allocator) {
+				insert(begin() ,vect.begin(), vect.end());
 			}
 
-			~vector()
-			{
+			~vector() {
 				clear();
-				if (this->_capacity != 0)
-					this->_allocator.deallocate(this->_array, this->_capacity);
+				if (_capacity != 0)
+					_allocator.deallocate(_array, _capacity);
 			}
 
-			vector& operator= (const vector& x)
-			{
-				if (this != &x)
-				{
-					for (size_type i = 0; i < _size; ++i)
+			vector& operator= (const vector& vect) {
+				if (this != &vect) {
+					for (size_type i = 0; i < _size; i++)
 						_allocator.destroy(_array + i);
-					if (_capacity < x._capacity)
-					{
+					if (_capacity < vect._capacity) {
 						_allocator.deallocate(_array, _capacity);
-						this->_capacity = x._capacity;
-						this->_array = _allocator.allocate(_capacity);
+						_capacity = vect._capacity;
+						_array = _allocator.allocate(_capacity);
 					}
-					for (size_type i = 0; i < x._size; ++i)
-						_allocator.construct(&_array[i], x._array[i]);
-					this->_size = x._size;
+					for (size_type i = 0; i < vect._size; i++)
+						_allocator.construct(&_array[i], vect._array[i]);
+					_size = vect._size;
 				}
 				return (*this);
 			}
 
-			iterator begin()
-			{
-				return iterator(this->_array);
+			iterator begin() {
+				return iterator(_array);
 			}
 
-			const_iterator begin() const
-			{
-				return const_iterator(this->_array);
+			const_iterator begin() const {
+				return const_iterator(_array);
 			}
 
-			iterator end()
-			{
-				return iterator(this->_array + _size);
+			iterator end(){
+				return iterator(_array + _size);
 			}
-			const_iterator end() const
-			{
-				return const_iterator(this->_array + _size);
+			const_iterator end() const {
+				return const_iterator(_array + _size);
 			}
 
-			reverse_iterator rbegin()
-			{
+			reverse_iterator rbegin() {
 				return (reverse_iterator(end()));
 			}
 
-			const_reverse_iterator rbegin() const
-			{
+			const_reverse_iterator rbegin() const {
 				return (const_reverse_iterator(end()));
 			}
 
-			reverse_iterator rend()
-			{
+			reverse_iterator rend() {
 				return (reverse_iterator(begin()));
 			}
 
-			const_reverse_iterator rend() const
-			{
+			const_reverse_iterator rend() const {
 				return (const_reverse_iterator(begin()));
 			}
 
-			size_type size() const
-			{
-				return (this->_size);
+			size_type size() const {
+				return (_size);
 			}
 
-			size_type max_size() const
-			{
-				return (this->_allocator.max_size());
+			size_type max_size() const {
+				return (_allocator.max_size());
 			}
 
-			void resize (size_type n, value_type val = value_type())
-			{
-				if (n > _size)
-				{
+			void resize (size_type n, value_type val = value_type()) {
+				if (n > _size) {
 					if (n > _capacity)
 						reserve(n);
 				}
@@ -139,38 +117,30 @@ namespace ft
 				this->_size = n;
 			}
 
-			size_type capacity() const
-			{
-				return (this->_capacity);
+			bool empty() const {
+				return (_size == 0);
 			}
 
-			bool empty() const
-			{
-				return (this->_size == 0);
-			}
+            size_type capacity() const {
+                return (_capacity);
+            }
 
-			void reserve (size_type n)
-			{
-				if (n > _capacity)
-				{
+			void reserve (size_type n) {
+				if (n > _capacity) {
 					size_type i = 0;
 					pointer new_array = _allocator.allocate(n);
-					try
-					{
-						for (i = 0; i < _size; ++i)
-						{
+					try {
+						for (i = 0; i < _size; i++) {
 							_allocator.construct(&new_array[i], _array[i]);
 						}
 					}
-					catch(const std::exception& e)
-					{
-						for (size_type j = 0; j < i; ++j)
+					catch(const std::exception& e) {
+						for (size_type j = 0; j < i; j++)
 							_allocator.destroy(&new_array[i]);
 						_allocator.deallocate(new_array, n);
 						throw;
 					}
-					for (size_type j = 0; j < _size; ++j)
-					{
+					for (size_type j = 0; j < _size; j++) {
 						_allocator.destroy(&_array[j]);
 					}
 					_allocator.deallocate(_array, _capacity);
