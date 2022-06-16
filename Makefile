@@ -1,11 +1,11 @@
 NAME		= cerebus_ft_containers
 
-SRC			= main.cpp tester_vector.cpp tester_stack.cpp tester_map.cpp
+SRC			= main.cpp vector_test.cpp stack_test.cpp map_test.cpp
 
 OBJS		= ${SRC:.cpp=.o}
 
 HEADS		= vector.hpp vector_iterator.hpp utils.hpp reverse_iterator.hpp stack.hpp \
-				RedBlackTree.hpp node_tree.hpp map.hpp ft_is_integral.hpp bidirectional_iterator.hpp tester_headers.hpp
+				RedBlackTree.hpp node_tree.hpp map.hpp ft_is_integral.hpp bidirectional_iterator.hpp test_headers.hpp
 
 CPP			= clang++
 
