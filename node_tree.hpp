@@ -40,8 +40,9 @@ namespace ft {
                               node_left(NULL),
                               node_right(NULL),
                               red(false),
-                              value(v) { }
-        ~Node() { }
+                              value(v) {}
+
+        ~Node() {}
 
         Node &operator=(const Node &another) {
             if (this != another) {
