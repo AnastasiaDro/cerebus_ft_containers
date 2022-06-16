@@ -260,184 +260,153 @@ namespace ft
 				this->_size = n;
 			}
 
-			void push_back (const value_type& val)
-			{
-				insert(end(), val);
-			}
-
-			void pop_back()
-			{
-				--_size;
+			void pop_back() {
+				_size--;
 				_allocator.destroy(_array + _size);
 			}
 
-			iterator insert (iterator position, const value_type& val)
-			{
-				size_type pos = &(*position) - _array;
-				insert(position, (size_type)1, val);
-				return (begin() + pos);
-			}
+            void push_back (const value_type& x) {
+                insert(end(), x);
+            }
 
-			void insert (iterator position, size_type n, const value_type& val)
-			{
-				if (this->_size + n >= this->_capacity)
-				{
-					this->_capacity = this->_capacity * 2 + (this->_capacity == 0);
-					if (this->_capacity < this->_size + n)
-						this->_capacity = this->_size + n;
-					pointer new_arr = this->_allocator.allocate(this->_capacity);
+			void insert (iterator pos, size_type n, const value_type& x) {
+				if (_size + n >= _capacity) {
+					_capacity = _capacity * 2 + (_capacity == 0);
+					if (_capacity < _size + n)
+						_capacity = _size + n;
+					pointer new_arr = _allocator.allocate(_capacity);
 					int i = 0;
-					for (iterator it = begin(); it != position; ++it, ++i)
-						this->_allocator.construct(new_arr + i, *it);
-					for (size_type j = 0; j < n; ++j, ++i)
-						this->_allocator.construct(new_arr + i, val);
-					for (iterator it = position; it != end(); ++it, ++i)
-						this->_allocator.construct(new_arr + i, *it);
-					for (size_type i = 0; i < this->_size; ++i)
-						this->_allocator.destroy(&this->_array[i]);
-					if (this->_array)
-						this->_allocator.deallocate(this->_array, this->_capacity);
-					this->_size += n;
-					this->_array = new_arr;
-				}
-				else
-				{
+					for (iterator it = begin(); it != pos; it++, i++)
+						_allocator.construct(new_arr + i, *it);
+					for (size_type j = 0; j < n; j++, i++)
+						_allocator.construct(new_arr + i, x);
+					for (iterator it = pos; it != end(); it++, i++)
+						_allocator.construct(new_arr + i, *it);
+					for (size_type i = 0; i < _size; i++)
+						_allocator.destroy(&this->_array[i]);
+					if (_array)
+						_allocator.deallocate(_array, _capacity);
+					_size += n;
+					_array = new_arr;
+				} else {
 					iterator it = end();
-					for (; it != position; --it)
-					{
-						this->_allocator.destroy(&(*it) + n);
-						this->_allocator.construct((&(*it) + n), *it);
+					for (; it != pos; it--) {
+						_allocator.destroy(&(*it) + n);
+						_allocator.construct((&(*it) + n), *it);
 					}
-					this->_allocator.destroy(&(*it) + n);
-					this->_allocator.construct((&(*it) + n), *it);
-					for (size_type j = 0; j != n; ++j, ++it)
-					{
-						this->_allocator.destroy(&(*it));
-						this->_allocator.construct(&(*it), val);
+					_allocator.destroy(&(*it) + n);
+					_allocator.construct((&(*it) + n), *it);
+					for (size_type j = 0; j != n; j++, it++) {
+						_allocator.destroy(&(*it));
+						_allocator.construct(&(*it), x);
 					}
-					this->_size += n;
+					_size += n;
 				}
 			}
 
-			template <class InputIterator>
-			void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = 0)
-			{
-				size_type n = 0;
-				size_type new_cap = this->_capacity;
-				size_type start = position - this->begin();
-				for (InputIterator it = first; it != last; ++it)
-					n++;
-				if (this->_size + n >= this->_capacity)
-				{
-					new_cap = new_cap * 2 + (new_cap == 0);
-					if (new_cap < this->_size + n)
-						new_cap = this->_size + n;
-					pointer new_arr = this->_allocator.allocate(new_cap);
-					try
-					{
+            iterator insert(iterator pos, const value_type& val) {
+                size_type position = &(*pos) - _array;
+                insert(pos, (size_type)1, val);
+                return (begin() + position);
+            }
 
-						std::uninitialized_copy(begin(), position, new_arr);
-						std::uninitialized_copy(first, last, new_arr + start);
-						std::uninitialized_copy(position, end(), new_arr + start + n);
+			template <class InIt>
+			void insert(iterator pos, InIt f, InIt l, typename ft::enable_if<!ft::is_integral<InIt>::value >::type* = 0) {
+				size_type n = 0;
+				size_type new_cap = _capacity;
+				size_type start = pos - begin();
+				for (InIt it = f; it != l; it++)
+					n++;
+				if (n + _size >= _capacity) {
+					new_cap = new_cap * 2 + (new_cap == 0);
+					if (new_cap < _size + n)
+						new_cap = _size + n;
+					pointer new_arr = _allocator.allocate(new_cap);
+					try {
+						std::uninitialized_copy(begin(), pos, new_arr);
+						std::uninitialized_copy(f, l, new_arr + start);
+						std::uninitialized_copy(pos, end(), new_arr + start + n);
 					}
-					catch(...)
-					{
-						this->_allocator.deallocate(new_arr,new_cap);
+					catch(...) {
+						_allocator.deallocate(new_arr,new_cap);
 						throw;
 					}
-
-					for (size_type i = 0; i < this->_size; ++i)
-						this->_allocator.destroy(&this->_array[i]);
-					if (this->_array)
-						this->_allocator.deallocate(this->_array, this->_capacity);
-					this->_size += n;
-					this->_array = new_arr;
-					this->_capacity = new_cap;
-				}
-				else
-				{
+					for (size_type i = 0; i < _size; ++i)
+						_allocator.destroy(&this->_array[i]);
+					if (_array)
+						_allocator.deallocate(_array, _capacity);
+					_size += n;
+					_array = new_arr;
+					_capacity = new_cap;
+				} else {
 					iterator it = end();
-					for (; it != position; --it)
-					{
-						this->_allocator.destroy(&(*it) + n);
-						this->_allocator.construct((&(*it) + n), *it);
+					for (; it != pos; it--) {
+						_allocator.destroy(&(*it) + n);
+						_allocator.construct((&(*it) + n), *it);
 					}
-					this->_allocator.destroy(&(*it) + n);
-					this->_allocator.construct((&(*it) + n), *it);
-					InputIterator jt = first;
-					for (size_type j = 0; j != n; ++j, ++it, ++jt)
-					{
-						this->_allocator.destroy(&(*it));
-						this->_allocator.construct(&(*it), *jt);
+					_allocator.destroy(&(*it) + n);
+					_allocator.construct((&(*it) + n), *it);
+					InIt jt = f;
+					for (size_type j = 0; j != n; j++, it++, jt++) {
+						_allocator.destroy(&(*it));
+						_allocator.construct(&(*it), *jt);
 					}
-					this->_size += n;
+					_size += n;
 				}
 			}
-
-			iterator erase (iterator position)
-			{
-				return (erase(position, position + 1));
-			}
-
-			iterator erase (iterator first, iterator last)
-			{
-				pointer p = &(*first);
-				int sum = 0;
-				for (iterator it = first; it != last; ++it)
-				{
-					this->_allocator.destroy(&(*it));
+            
+			iterator erase (iterator f, iterator l) {
+                int sum = 0;
+				pointer ptr = &(*f);
+				for (iterator it = f; it != l; it++) {
+					_allocator.destroy(&(*it));
 					sum++;
 				}
-				this->_size -= sum;
-				for (size_type i = 0; i < this->_size; ++i)
-					this->_allocator.construct(&(*first) + i, *(&(*last) + i));
-				return (iterator(p));
+				_size -= sum;
+				for (size_type i = 0; i < _size; i++)
+					this->_allocator.construct(&(*f) + i, *(&(*l) + i));
+				return (iterator(ptr));
 			}
 
-			void swap (vector& x)
-			{
-				pointer tmp_array = x._array;
-				size_type tmp_size = x._size;
-				size_type tmp_capacity = x._capacity;
-				allocator_type tmp_allocator = x._allocator;
+            iterator erase (iterator pos) {
+                return (erase(pos, pos + 1));
+            }
 
-				x._array = this->_array;
-				x._size = this->_size;
-				x._capacity = this->_capacity;
-				x._allocator = this->_allocator;
+			void swap (vector& v) {
+                size_type tmp_capacity = v._capacity;
+                allocator_type tmp_allocator = v._allocator;
+				pointer tmp_arr = v._array;
+				size_type tmp_size = v._size;
+                
+                v._capacity = _capacity;
+                v._allocator = _allocator;
+				v._array = _array;
+				v._size = _size;
 
-				this->_array = tmp_array;
-				this->_size = tmp_size;
-				this->_capacity = tmp_capacity;
-				this->_allocator = tmp_allocator;
-
-				// ft::swap(this->_array, x._array);
-				// ft::swap(this->_size, x._size);
-				// ft::swap(this->_capacity, x._capacity);
-				// ft::swap(this->_allocator, x._allocator);
+                _capacity = tmp_capacity;
+                _allocator = tmp_allocator;
+				_array = tmp_arr;
+				_size = tmp_size;
 			}
 
-			void clear()
-			{
-				for (size_type i = 0; i < this->_size; ++i)
-					this->_allocator.destroy(&this->_array[i]);
-				this->_size = 0;
-			}
 
-			value_type* data()
-			{
-				return (this->_array);
-			}
+            allocator_type get_allocator() const {
+                return (_allocator);
+            }
 
-			const value_type* data() const
-			{
-				return (this->_array);
-			}
+            value_type *data() {
+                return (_array);
+            }
 
-			allocator_type get_allocator() const
-			{
-				return (this->_allocator);
-			}
+            const value_type *data() const {
+                return (_array);
+            }
+
+            void clear() {
+                for (size_type i = 0; i < this->_size; ++i)
+                    this->_allocator.destroy(&this->_array[i]);
+                this->_size = 0;
+            }
 
 		private:
 			pointer _array;
